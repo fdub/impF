@@ -20,7 +20,14 @@ let createVariable<'a when 'a : equality>(init : 'a) (afterChanged : 'a -> unit)
 [<AutoOpen>]
 module VarblExt=
     type IVariable<'a> with
-        member x.UpdateVar update =
+        member x.UpdateVar<'b> (update : 'a -> 'a) =
             x.Get()
             |> update
             |> x.Set
+               
+        member x.UpdateVar2<'b> (update : 'a -> 'a * 'b) =
+            x.Get()
+            |> update
+            |> fun (a, b) -> 
+                x.Set a
+                b

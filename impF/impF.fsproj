@@ -46,6 +46,8 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Utils.fs" />
     <Compile Include="Variable.fs" />
+    <Compile Include="Effects.fs" />
+    <Compile Include="Effects.Debug.fs" />
     <Compile Include="VmBase.fs" />
     <Compile Include="VmFieldFactory.fs" />
   </ItemGroup>

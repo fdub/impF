@@ -7,6 +7,9 @@ open System
 open System.Windows.Input
 open Variables
 
+open impF.Effects
+
+
 type PropertyChangedNotifier(sender : obj) =
     static let propChangedArgs = PropertyChangedEventArgs("V")
     let propertyChanged = Event<PropertyChangedEventHandler,PropertyChangedEventArgs>()
@@ -65,6 +68,8 @@ type ImmutableCommand
         member x.CanExecute _ = canExecute.Get()
         member x.Execute _ = execute()
 
+let always _ = true
+
 
 type IVmStateManager<'msg, 'state when 'state : equality> =
     abstract member AddChildStateUpdator : ('state -> unit) -> unit 
@@ -78,15 +83,26 @@ type VmStateManagerParams<'state> =
     ; SetFromParent : IEvent<'state>
     }  
 
+type UpdateFn<'msg, 'state when 'state : equality>  = 
+    | Simple of ('msg -> 'state -> 'state)
+    | WithEffects of ('msg -> 'state -> 'state * Cmd<'msg>)
+    
+
 type VmStateManager<'msg, 'state when 'state : equality> 
-    ( update : 'msg -> 'state -> 'state
+    ( update : UpdateFn<'msg, 'state>
     , p : VmStateManagerParams<'state>
-    ) =
+    ) = 
 
     let fieldUpdators = 
         ResizeArray<'state -> unit>()     
     let state = 
         createVariable<'state> p.Init ((fieldUpdators |> applyIter) |> chain <| p.OnStateChanged)        
+
+    let rec updateStateRec msg (updateFn : 'msg -> 'state -> 'state * Cmd<'msg>) =
+        let cmd = state.UpdateVar2 <| updateFn msg
+        match cmd.Invoke () with
+        | None -> ()
+        | Some msg -> updateStateRec msg updateFn
 
     do p.SetFromParent.Add state.Set
 
@@ -96,7 +112,11 @@ type VmStateManager<'msg, 'state when 'state : equality>
         member x.AddChildStateUpdator u = 
             fieldUpdators.Add u
         member x.UpdateState msg = 
-            state.UpdateVar <| update msg
+            match update with
+            | Simple updateFn -> 
+                state.UpdateVar <| updateFn msg
+            | WithEffects updateFn -> 
+                updateStateRec msg updateFn          
  
  
 let stateManager update (p : VmStateManagerParams<'state>) = 

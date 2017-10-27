@@ -13,5 +13,6 @@
         <Button Content="Example 2 Single VM" Click="Example2Click"/>
         <Button Content="Example 3 VM Composition" Click="Example3Click"/>
         <Button Content="Example 4" Click="Example4Click"/>
+        <Button Content="Example 5 Effects - Logging to Debug console" Click="Example5Click"/>
     </StackPanel>
 </Window>

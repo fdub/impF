@@ -32,7 +32,7 @@ module MutualUpdate =
 
 type MutualUpdateVm(p) =
     let sm = 
-        stateManager MutualUpdate.update p
+        stateManager (Simple MutualUpdate.update) p
 
     member val Number = 
         sm.Field MutualUpdate.Msg.Number (fun m -> m.Number)

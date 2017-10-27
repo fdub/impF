@@ -72,7 +72,7 @@ module Order =
 
 type PersonVm(p) =
     let sm = 
-        stateManager Person.update p
+        stateManager (Simple Person.update) p
 
     member val FirstName = 
         sm.Field Person.Msg.First (fun m -> m.FirstName) 
@@ -83,7 +83,7 @@ type PersonVm(p) =
 
 type OrderVm(p)  = 
     let vm = 
-        stateManager Order.update p
+        stateManager (Simple Order.update) p
 
     member val Buyer = 
         vm.VmField Order.Msg.Buyer (fun m -> m.Buyer) PersonVm

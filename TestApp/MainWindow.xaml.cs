@@ -48,6 +48,9 @@ namespace TestApp
             new E4_Contract().Show();
         }
 
-        
+        private void Example5Click(object sender, RoutedEventArgs e)
+        {
+            new E5_Effects_Logging().Show();
+        }
     }
 }

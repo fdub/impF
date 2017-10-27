@@ -120,7 +120,7 @@ module Contract =
              
  type PersonVm(p) =
     let vm = 
-        stateManager Person.update p
+        stateManager (Simple Person.update) p
 
     member val FirstName = 
         vm.Field Person.Msg.First (fun m -> m.FirstName) 
@@ -134,7 +134,7 @@ module Contract =
 
 type ContractVm(p)  = 
     let vm = 
-        stateManager Contract.update p
+        stateManager (Simple Contract.update) p
 
     member val Buyer = 
         vm.VmField Contract.Msg.Buyer (fun m -> m.Buyer) PersonVm

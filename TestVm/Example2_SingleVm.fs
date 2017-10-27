@@ -47,7 +47,7 @@ module Person =
 
  type PersonVm(p) =
     let sm = 
-        stateManager Person.update p
+        stateManager (Simple Person.update) p
 
     member val FirstName = 
         sm.Field Person.Msg.First (fun m -> m.FirstName) 

@@ -9,13 +9,21 @@ type Timer<'msg>
     , period : int
     , msg : int -> 'msg ) =
     inherit Sub<'msg> ()
-    let toUnixTime date = (date - DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds |> int
+
+    let toUnixTime date = 
+        (date - DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds 
+        |> int
     let event = 
         Event<_> ()
     let syncContext = 
         SynchronizationContext.Current
     let raiseEvent = 
-        SendOrPostCallback (fun _ -> DateTimeOffset.UtcNow |> toUnixTime |> msg |> event.Trigger)
+        SendOrPostCallback 
+            ( fun _ -> 
+                DateTimeOffset.UtcNow 
+                |> toUnixTime 
+                |> msg 
+                |> event.Trigger )
     let timer = 
         new System.Threading.Timer 
             ( fun _ -> syncContext.Post (raiseEvent, null :> obj) 

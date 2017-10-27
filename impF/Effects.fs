@@ -8,8 +8,10 @@ type Cmd<'msg> () =
 
 type CmdNone<'msg> () =
     inherit Cmd<'msg> ()
-    override __.Invoke () = None
+    override __.Invoke () = 
+        None
 
 
 module Cmd =
-    let none<'msg> = CmdNone<'msg> () :> Cmd<'msg>
+    let none<'msg> = 
+        CmdNone<'msg> () :> Cmd<'msg>

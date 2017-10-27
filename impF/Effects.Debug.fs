@@ -1,12 +1,18 @@
 ﻿namespace impF.Effects
 
 
-type Debug<'msg> (debugMessage : string) =
+open System.Diagnostics
+
+
+type Debug<'msg> 
+    ( debugMessage : string
+    ) =
     inherit Cmd<'msg> ()
     override __.Invoke () = 
-        System.Diagnostics.Debug.WriteLine (debugMessage)
+        Debug.WriteLine (debugMessage)
         None
 
 
 module Debug =
-    let debug<'msg> debugMessage = Debug (debugMessage) :> Cmd<'msg>
+    let debug<'msg> debugMessage = 
+        Debug (debugMessage) :> Cmd<'msg>

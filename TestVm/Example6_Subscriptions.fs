@@ -31,7 +31,8 @@ module Subscriptions =
     let subscription = 
         Sub.batch
             [ Timer.timer 0 1000 TickSeconds
-            ; Timer.timer 0 100 TickTenth ]
+            ; Timer.timer 0 100 TickTenth 
+            ]
 
 
 type LoggingVm(p) =

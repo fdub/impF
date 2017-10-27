@@ -98,7 +98,7 @@ type VmStateManager<'msg, 'state when 'state : equality>
     let fieldUpdators = 
         ResizeArray<'state -> unit>()     
     
-    let subscriptionDisposable = 
+    let _subscriptionDisposable = 
         match subscription with
         | None -> 
             None

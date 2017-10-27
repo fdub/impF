@@ -9,19 +9,24 @@ type Sub<'msg> () =
     abstract Dispose : unit -> unit
     abstract Callback : IEvent<'msg>
     interface IDisposable with
-        member this.Dispose () = this.Dispose ()
+        member this.Dispose () = 
+            this.Dispose ()
 
 
-type Batch<'msg> (children : Sub<'msg> list) =
+type Batch<'msg> 
+    ( children : Sub<'msg> list
+    ) =
     inherit Sub<'msg> ()
 
-    let event = Event<'msg> ()
+    let event = 
+        Event<'msg> ()
 
     let subscriptions = 
         children 
         |> List.map (fun c -> c.Callback.Subscribe (event.Trigger))
 
-    override __.Callback = event.Publish
+    override __.Callback = 
+        event.Publish
 
     override __.Dispose () = 
         subscriptions
@@ -31,4 +36,5 @@ type Batch<'msg> (children : Sub<'msg> list) =
 
 
 module Sub =
-    let batch children = new Batch<'msg> (children)
+    let batch children = 
+        new Batch<'msg> (children)

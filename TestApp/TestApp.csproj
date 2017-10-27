@@ -55,6 +55,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="E6_Subscriptions.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="E5_Effects_Logging.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -74,6 +78,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="E6_Subscriptions.xaml.cs">
+      <DependentUpon>E6_Subscriptions.xaml</DependentUpon>
     </Compile>
     <Compile Include="E5_Effects_Logging.xaml.cs">
       <DependentUpon>E5_Effects_Logging.xaml</DependentUpon>

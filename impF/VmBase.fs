@@ -8,6 +8,7 @@ open System.Windows.Input
 open Variables
 
 open impF.Effects
+open impF.Subscriptions
 
 
 type PropertyChangedNotifier(sender : obj) =
@@ -69,7 +70,7 @@ type ImmutableCommand
         member x.Execute _ = execute()
 
 let always _ = true
-
+            
 
 type IVmStateManager<'msg, 'state when 'state : equality> =
     abstract member AddChildStateUpdator : ('state -> unit) -> unit 
@@ -91,10 +92,20 @@ type UpdateFn<'msg, 'state when 'state : equality>  =
 type VmStateManager<'msg, 'state when 'state : equality> 
     ( update : UpdateFn<'msg, 'state>
     , p : VmStateManagerParams<'state>
-    ) = 
+    , subscription : Sub<'msg> option
+    ) as self = 
 
     let fieldUpdators = 
         ResizeArray<'state -> unit>()     
+    
+    let subscriptionDisposable = 
+        match subscription with
+        | None -> 
+            None
+        | Some sub ->
+            sub.Callback.Subscribe (self :> IVmStateManager<'msg, 'state>).UpdateState
+            |> Some
+    
     let state = 
         createVariable<'state> p.Init ((fieldUpdators |> applyIter) |> chain <| p.OnStateChanged)        
 
@@ -107,11 +118,11 @@ type VmStateManager<'msg, 'state when 'state : equality>
     do p.SetFromParent.Add state.Set
 
     interface IVmStateManager<'msg,'state> with
-        member x.Get() = 
+        member self.Get() = 
             state.Get()  
-        member x.AddChildStateUpdator u = 
+        member self.AddChildStateUpdator u = 
             fieldUpdators.Add u
-        member x.UpdateState msg = 
+        member self.UpdateState msg = 
             match update with
             | Simple updateFn -> 
                 state.UpdateVar <| updateFn msg
@@ -120,7 +131,11 @@ type VmStateManager<'msg, 'state when 'state : equality>
  
  
 let stateManager update (p : VmStateManagerParams<'state>) = 
-    VmStateManager<_,_>(update, p)
+    VmStateManager<_,_>(update, p, None)
+
+let stateManagerWithSubcription update (p : VmStateManagerParams<'state>) subscriptions = 
+    VmStateManager<_,_>(update, p, Some subscriptions)
+
 
 let createRootVm (factory : VmStateManagerParams<'vmState> -> 'vm) init = 
      let p = {Init = init; OnStateChanged = ignore; SetFromParent = Event<_>().Publish }

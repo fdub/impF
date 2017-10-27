@@ -56,6 +56,7 @@
     <Compile Include="Example3_VmComposition.fs" />
     <Compile Include="E4_Contract.fs" />
     <Compile Include="Example5_Effects_Logging.fs" />
+    <Compile Include="Example6_Subscriptions.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

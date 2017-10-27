@@ -8,16 +8,15 @@
         Title="LoggingV" Height="300" Width="300"
         xmlns:vm="clr-namespace:Example5_Effects_Logging;assembly=TestVm"
         d:DataContext="{d:DesignInstance vm:Logging, IsDesignTimeCreatable=False}">
-
     <StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label Content="Message: "/>
+            
             <TextBox Width="100" Text="{Binding Message.V , UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal">
             <Button Content="Log to Debug console" Command="{Binding LogCommand}"/>
         </StackPanel>
-
     </StackPanel>
 </Window>

@@ -52,5 +52,10 @@ namespace TestApp
         {
             new E5_Effects_Logging().Show();
         }
+
+        private void Example6Click(object sender, RoutedEventArgs e)
+        {
+            new E6_Subscriptions().Show();
+        }
     }
 }
